@@ -65,7 +65,7 @@ struct GameEndView: View {
                             .cornerRadius(12)
                     }
                     
-                    Button(action: onSeeResults) {
+                   /* Button(action: onSeeResults) {
                         Text("See Results")
                             .font(.title2)
                             .fontWeight(.semibold)
@@ -78,7 +78,7 @@ struct GameEndView: View {
                                 RoundedRectangle(cornerRadius: 12)
                                     .stroke(Color.blue, lineWidth: 2)
                             )
-                    }
+                    }*/
                 }
                 .padding(.horizontal, 40)
                 .padding(.top, 20)
