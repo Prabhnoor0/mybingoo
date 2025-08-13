@@ -12,29 +12,34 @@ struct GameView: View {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
-                GameHeader(gameModeManager: gameModeManager)
+            ZStack {
+                AppTheme.neutral
+                    .ignoresSafeArea()
 
-                Spacer(minLength: 10)
+                VStack(spacing: 0) {
+                    GameHeader(gameModeManager: gameModeManager)
 
-                if gameModeManager.selectedMode == .singlePlayerAI {
-                    AIGameContent(gameState: gameModeManager.aiGameState)
-                } else {
-                    MultiplayerLobbyView(gameState: gameModeManager.multiplayerGameState)
+                    Spacer(minLength: 10)
+
+                    if gameModeManager.selectedMode == .singlePlayerAI {
+                        AIGameContent(gameState: gameModeManager.aiGameState)
+                    } else {
+                        MultiplayerLobbyView(gameState: gameModeManager.multiplayerGameState)
+                    }
+
+                    Spacer(minLength: 10)
+
+                    // Only show ActionBar for single-player and when not showing game end
+                    if gameModeManager.selectedMode == .singlePlayerAI && gameModeManager.aiGameState.gameWinner == nil {
+                        ActionBar(
+                            gameState: gameModeManager.aiGameState,
+                            onNewGame: { gameModeManager.startGame(mode: .singlePlayerAI) },
+                            onEndGame: { showEndGameAlert = true }
+                        )
+                    }
                 }
-
-                Spacer(minLength: 10)
-
-                // Only show ActionBar for single-player and when not showing game end
-                if gameModeManager.selectedMode == .singlePlayerAI && gameModeManager.aiGameState.gameWinner == nil {
-                    ActionBar(
-                        gameState: gameModeManager.aiGameState,
-                        onNewGame: { gameModeManager.startGame(mode: .singlePlayerAI) },
-                        onEndGame: { showEndGameAlert = true }
-                    )
-                }
+                .navigationBarHidden(true)
             }
-            .navigationBarHidden(true)
         }
         .navigationViewStyle(.stack)
 

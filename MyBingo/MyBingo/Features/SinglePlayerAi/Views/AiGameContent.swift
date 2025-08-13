@@ -37,19 +37,19 @@ struct AIGameContent: View {
                     Text("You chose: \(playerChoice)")
                         .font(.title2)
                         .fontWeight(.semibold)
-                        .foregroundColor(.blue)
+                        .foregroundColor(.white)
                 }
                 
                 if let aiChoice = gameState.aiHasChosenNumber {
                     Text("AI chose: \(aiChoice)")
                         .font(.title2)
                         .fontWeight(.semibold)
-                        .foregroundColor(.red)
+                        .foregroundColor(AppTheme.accent)
                 } else if !gameState.isPlayerTurn && !gameState.gameEnded {
                     Text("AI is thinking...")
                         .font(.title2)
                         .fontWeight(.semibold)
-                        .foregroundColor(.orange)
+                        .foregroundColor(AppTheme.primary)
                 }
                 
                 if gameState.isPlayerTurn && !gameState.gameEnded {
@@ -73,6 +73,7 @@ struct AIGameContent: View {
                 gameState.playerClickedNumber(number)
             }
         }
+        .padding(.horizontal, 16)
         .onChange(of: gameState.gameWinner) { oldValue, newValue in
             if newValue != nil && !showGameEndView {
                 // Show the game end view directly when game ends

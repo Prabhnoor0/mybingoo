@@ -11,66 +11,102 @@ struct MultiplayerLobbyView: View {
     @ObservedObject var gameState: MultiplayerGameState
 
     var body: some View {
-        // Add this button temporarily above "Create Room"
-        
+        ZStack {
+            AppTheme.neutral
+                .ignoresSafeArea()
 
-        VStack(spacing: 30) {
-            Text("Multiplayer Bingo")
-                .font(.largeTitle).fontWeight(.bold)
-                .padding(.top, 20)
+            VStack(spacing: 30) {
+                Text("Multiplayer Bingo")
+                    .font(.largeTitle).fontWeight(.bold)
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [AppTheme.red, AppTheme.green, AppTheme.yellow],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .padding(.top, 20)
 
-            // Connection Status
-            HStack {
-                Circle()
-                    .fill(statusColor)
-                    .frame(width: 12, height: 12)
-                
-                Text(statusText)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-
-            // Main Content Based on Connection Status
-            Group {
-                switch gameState.connectionStatus {
-                case .disconnected:
-                    VStack(spacing: 20) {
-                        Button("Create Room") {
-                            gameState.showingRoomCreation = true
-                        }
-                        .buttonStyle(GameModeButtonStyle(color: .blue))
-                        
-                        Button("Join Room") {
-                            gameState.showingRoomJoining = true
-                        }
-                        .buttonStyle(GameModeButtonStyle(color: .green))
-                    }
+                // Connection Status
+                HStack {
+                    Circle()
+                        .fill(statusColor)
+                        .frame(width: 12, height: 12)
                     
-                case .connecting:
-                    ProgressView("Connecting...")
-                        .padding()
-                        
-                case .connected:
-                    ProgressView("Joining room...")
-                        .padding()
-                    
-                case .inRoom:
-                    RoomLobbyContent(gameState: gameState)
-                    
-                case .playing:
-                    MultiplayerGameContent(gameState: gameState)
+                    Text(statusText)
+                        .font(.subheadline)
+                        .foregroundColor(.white)
                 }
-            }
 
-            Spacer()
+                // Main Content Based on Connection Status
+                Group {
+                    switch gameState.connectionStatus {
+                    case .disconnected:
+                        // Square buttons side by side
+                        HStack(spacing: 30) {
+                            // Create Room button (Green) - Square
+                            Button {
+                                gameState.showingRoomCreation = true
+                            } label: {
+                                VStack(spacing: 16) {
+                                    Image(systemName: "plus.circle.fill")
+                                        .font(.system(size: 40))
+                                        .foregroundColor(.white)
+                                    Text("Create")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.white)
+                                }
+                            }
+                            .buttonStyle(SquareButtonStyle(backgroundColor: AppTheme.green))
+                            .frame(width: 140, height: 140)
 
-            if let error = gameState.errorMessage {
-                Text(error)
-                    .foregroundColor(.red)
-                    .padding()
-                    .background(Color.red.opacity(0.1))
-                    .cornerRadius(8)
-                    .padding(.horizontal)
+                            // Join Room button (Red) - Square
+                            Button {
+                                gameState.showingRoomJoining = true
+                            } label: {
+                                VStack(spacing: 16) {
+                                    Image(systemName: "person.2.circle.fill")
+                                        .font(.system(size: 40))
+                                        .foregroundColor(.white)
+                                    Text("Join")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.white)
+                                }
+                            }
+                            .buttonStyle(SquareButtonStyle(backgroundColor: AppTheme.red))
+                            .frame(width: 140, height: 140)
+                        }
+                        
+                    case .connecting:
+                        ProgressView("Connecting...")
+                            .foregroundColor(AppTheme.yellow)
+                            .padding()
+                            
+                    case .connected:
+                        ProgressView("Joining room...")
+                            .foregroundColor(AppTheme.green)
+                            .padding()
+                        
+                    case .inRoom:
+                        RoomLobbyContent(gameState: gameState)
+                        
+                    case .playing:
+                        MultiplayerGameContent(gameState: gameState)
+                    }
+                }
+
+                Spacer()
+
+                if let error = gameState.errorMessage {
+                    Text(error)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(AppTheme.red.opacity(0.2))
+                        .cornerRadius(8)
+                        .padding(.horizontal)
+                }
             }
         }
         .sheet(isPresented: $gameState.showingRoomCreation) {
@@ -104,16 +140,7 @@ struct MultiplayerLobbyView: View {
     }
 }
 
-private struct GameModeButtonStyle: ButtonStyle {
-    let color: Color
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.title2).foregroundColor(.white)
-            .frame(width: 200, height: 55)
-            .background(color.opacity(configuration.isPressed ? 0.6 : 1))
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-    }
-}
+
 
 private struct CreateRoomSheet: View {
     @ObservedObject var gameState: MultiplayerGameState
@@ -121,36 +148,48 @@ private struct CreateRoomSheet: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 20) {
-                Text("Create New Room")
-                    .font(.title).fontWeight(.bold)
-                    .padding(.top, 20)
+            ZStack {
+                AppTheme.neutral
+                    .ignoresSafeArea()
                 
-                TextField("Your Name", text: $gameState.playerName)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.horizontal)
-                
-                Button("Create Room") {
-                    gameState.createRoom()
-                    dismiss()
+                VStack(spacing: 20) {
+                    Text("Create New Room")
+                        .font(.title).fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.top, 20)
+                    
+                    TextField("Your Name", text: $gameState.playerName)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.horizontal)
+                        .background(Color.white)
+                        .cornerRadius(8)
+                    
+                    Button("Create Room") {
+                        gameState.createRoom()
+                        dismiss()
+                    }
+                    .font(.title2).fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .frame(width: 200, height: 55)
+                    .background(gameState.playerName.isEmpty ? Color.gray : AppTheme.green)
+                    .cornerRadius(16)
+                    .shadow(color: AppTheme.green.opacity(0.4), radius: 8, x: 0, y: 4)
+                    .disabled(gameState.playerName.isEmpty || gameState.isLoading)
+                    
+                    if gameState.isLoading {
+                        ProgressView("Creating room...")
+                            .foregroundColor(.white)
+                            .padding()
+                    }
+                    
+                    Spacer()
                 }
-                .font(.title2).foregroundColor(.white)
-                .frame(width: 170, height: 55)
-                .background(gameState.playerName.isEmpty ? Color.gray : Color.blue)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .disabled(gameState.playerName.isEmpty || gameState.isLoading)
-                
-                if gameState.isLoading {
-                    ProgressView("Creating room...")
-                        .padding()
-                }
-                
-                Spacer()
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Cancel") { dismiss() }
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Cancel") { dismiss() }
+                            .foregroundColor(AppTheme.yellow)
+                    }
                 }
             }
         }
@@ -163,40 +202,54 @@ private struct JoinRoomSheet: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 20) {
-                Text("Join Room")
-                    .font(.title).fontWeight(.bold)
-                    .padding(.top, 20)
+            ZStack {
+                AppTheme.neutral
+                    .ignoresSafeArea()
                 
-                TextField("Your Name", text: $gameState.playerName)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.horizontal)
-                
-                TextField("Room Code", text: $gameState.roomCode)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.horizontal)
-                
-                Button("Join Room") {
-                    gameState.joinRoom()
-                    dismiss()
+                VStack(spacing: 20) {
+                    Text("Join Room")
+                        .font(.title).fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.top, 20)
+                    
+                    TextField("Your Name", text: $gameState.playerName)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.horizontal)
+                        .background(Color.white)
+                        .cornerRadius(8)
+                    
+                    TextField("Room Code", text: $gameState.roomCode)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.horizontal)
+                        .background(Color.white)
+                        .cornerRadius(8)
+                    
+                    Button("Join Room") {
+                        gameState.joinRoom()
+                        dismiss()
+                    }
+                    .font(.title2).fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .frame(width: 200, height: 55)
+                    .background(canJoin ? AppTheme.red : Color.gray)
+                    .cornerRadius(16)
+                    .shadow(color: AppTheme.red.opacity(0.4), radius: 8, x: 0, y: 4)
+                    .disabled(!canJoin || gameState.isLoading)
+                    
+                    if gameState.isLoading {
+                        ProgressView("Joining room...")
+                            .foregroundColor(.white)
+                            .padding()
+                    }
+                    
+                    Spacer()
                 }
-                .font(.title2).foregroundColor(.white)
-                .frame(width: 170, height: 55)
-                .background(canJoin ? Color.green : Color.gray)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .disabled(!canJoin || gameState.isLoading)
-                
-                if gameState.isLoading {
-                    ProgressView("Joining room...")
-                        .padding()
-                }
-                
-                Spacer()
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Cancel") { dismiss() }
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Cancel") { dismiss() }
+                            .foregroundColor(AppTheme.yellow)
+                    }
                 }
             }
         }
@@ -215,45 +268,49 @@ private struct RoomLobbyContent: View {
             VStack(spacing: 20) {
                 VStack(spacing: 10) {
                     Text("Room Code")
-                        .font(.headline).foregroundColor(.secondary)
+                        .font(.headline).foregroundColor(AppTheme.yellow)
                     
                     HStack {
                         Text(gameState.roomCode)
                             .font(.title).fontWeight(.bold)
+                            .foregroundColor(.white)
                             .padding(.horizontal, 20)
                             .padding(.vertical, 10)
-                            .background(Color.blue.opacity(0.1))
+                            .background(AppTheme.green.opacity(0.2))
                             .cornerRadius(10)
                         
                         Button {
                             UIPasteboard.general.string = gameState.roomCode
                         } label: {
                             Image(systemName: "doc.on.doc")
-                                .foregroundColor(.blue)
+                                .foregroundColor(AppTheme.green)
                         }
                     }
                     
                     Text("Share this code with friends!")
-                        .font(.caption).foregroundColor(.secondary)
+                        .font(.caption).foregroundColor(AppTheme.yellow.opacity(0.8))
                 }
                 .padding(.top)
                 
                 VStack(spacing: 8) {
                     HStack {
                         Text("Players")
+                            .foregroundColor(AppTheme.yellow)
                         Spacer()
                         Text("\(gameState.gameRoom?.players.count ?? 0)/\(gameState.gameRoom?.maxPlayers ?? 8)")
+                            .foregroundColor(.white)
                     }
                     .font(.headline)
                     
                     Text("Game Status: \(gameState.gameRoom?.gameState.rawValue.capitalized ?? "Unknown")")
-                        .font(.subheadline).foregroundColor(.secondary)
+                        .font(.subheadline).foregroundColor(AppTheme.green)
                 }
                 .padding(.horizontal, 20)
                 
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Players in Room")
                         .font(.headline)
+                        .foregroundColor(AppTheme.yellow)
                         .padding(.horizontal, 20)
                     
                     LazyVStack(spacing: 8) {
@@ -267,7 +324,7 @@ private struct RoomLobbyContent: View {
                             }
                         } else {
                             Text("No players found")
-                                .foregroundColor(.secondary)
+                                .foregroundColor(AppTheme.yellow.opacity(0.7))
                                 .padding()
                         }
                     }
@@ -281,28 +338,34 @@ private struct RoomLobbyContent: View {
                         Button(canStartGame ? "Start Game" : "Waiting for players...") {
                             gameState.startMultiplayerGame()
                         }
-                        .font(.title2).foregroundColor(.white)
+                        .font(.title2).fontWeight(.semibold)
+                        .foregroundColor(.white)
                         .frame(width: 200, height: 55)
-                        .background(canStartGame ? Color.green : Color.gray)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .background(canStartGame ? AppTheme.green : Color.gray)
+                        .cornerRadius(16)
+                        .shadow(color: AppTheme.green.opacity(0.4), radius: 8, x: 0, y: 4)
                         .disabled(!canStartGame)
                     } else {
                         Button(isCurrentPlayerReady ? "Ready ✓" : "Mark as Ready") {
                             gameState.toggleReady()
                         }
-                        .font(.title2).foregroundColor(.white)
+                        .font(.title2).fontWeight(.semibold)
+                        .foregroundColor(.white)
                         .frame(width: 200, height: 55)
-                        .background(isCurrentPlayerReady ? Color.green : Color.blue)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .background(isCurrentPlayerReady ? AppTheme.green : AppTheme.yellow)
+                        .cornerRadius(16)
+                        .shadow(color: (isCurrentPlayerReady ? AppTheme.green : AppTheme.yellow).opacity(0.4), radius: 8, x: 0, y: 4)
                     }
                     
                     Button("Leave Room") {
                         gameState.leaveRoom()
                     }
-                    .font(.title2).foregroundColor(.white)
+                    .font(.title2).fontWeight(.semibold)
+                    .foregroundColor(.white)
                     .frame(width: 200, height: 55)
-                    .background(Color.red)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .background(AppTheme.red)
+                    .cornerRadius(16)
+                    .shadow(color: AppTheme.red.opacity(0.4), radius: 8, x: 0, y: 4)
                 }
                 .padding(.bottom, 30)
             }
@@ -334,7 +397,7 @@ private struct PlayerRow: View {
         HStack {
             ZStack {
                 Circle()
-                    .fill(isCurrentUser ? Color.blue : Color.gray.opacity(0.3))
+                    .fill(isCurrentUser ? AppTheme.green : Color.gray.opacity(0.3))
                     .frame(width: 40, height: 40)
                 
                 Text(player.name.prefix(1).uppercased())
@@ -346,24 +409,24 @@ private struct PlayerRow: View {
                 HStack {
                     Text(player.name)
                         .font(.headline)
-                        .foregroundColor(isCurrentUser ? .blue : .primary)
+                        .foregroundColor(isCurrentUser ? AppTheme.green : .white)
                     
                     if isCurrentUser {
                         Text("(You)")
                             .font(.caption)
-                            .foregroundColor(.blue)
+                            .foregroundColor(AppTheme.yellow)
                     }
                     
                     if isHost {
                         Image(systemName: "crown.fill")
-                            .foregroundColor(.orange)
+                            .foregroundColor(AppTheme.yellow)
                             .font(.caption)
                     }
                 }
                 
                 Text("Joined \(timeAgo(from: player.joinedAt))")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(AppTheme.yellow.opacity(0.8))
             }
             
             Spacer()
@@ -372,25 +435,25 @@ private struct PlayerRow: View {
                 if player.isReady {
                     HStack {
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.green)
+                            .foregroundColor(AppTheme.green)
                         Text("Ready")
                             .font(.caption)
-                            .foregroundColor(.green)
+                            .foregroundColor(AppTheme.green)
                     }
                 } else {
                     HStack {
                         Image(systemName: "clock.circle.fill")
-                            .foregroundColor(.orange)
+                            .foregroundColor(AppTheme.yellow)
                         Text("Not Ready")
                             .font(.caption)
-                            .foregroundColor(.orange)
+                            .foregroundColor(AppTheme.yellow)
                     }
                 }
             }
         }
         .padding(.horizontal, 15)
         .padding(.vertical, 10)
-        .background(Color.gray.opacity(0.1))
+        .background(Color.white.opacity(0.1))
         .cornerRadius(10)
     }
     

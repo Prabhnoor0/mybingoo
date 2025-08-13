@@ -41,7 +41,7 @@ struct MyBingoApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ModeSelectionView()
+            SplashStartView()
         }
     }
 }

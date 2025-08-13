@@ -18,28 +18,23 @@ struct ActionBar: View {
     }
     
     var body: some View {
-        VStack(spacing: 10) {
-            
+        VStack(spacing: 12) {
             if gameState.gameEnded {
-                // Show "New Game" when game is over
-                Button("New Game") {
+                Button {
                     onNewGame()
+                } label: {
+                    Text("New Game")
+                        .frame(width: 200)
                 }
-                .font(.title2)
-                .foregroundStyle(.white)
-                .frame(width: 170, height: 55)
-                .background(Color.blue)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .buttonStyle(GlowingPrimaryButtonStyle())
             } else {
-                // Show "End Game" during gameplay
-                Button("End Game") {
+                Button {
                     onEndGame?()
+                } label: {
+                    Text("End Game")
+                        .frame(width: 200)
                 }
-                .font(.title2)
-                .foregroundStyle(.white)
-                .frame(width: 170, height: 55)
-                .background(Color.red)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .buttonStyle(RedAccentButtonStyle())
             }
         }
         .padding(.bottom, 20)

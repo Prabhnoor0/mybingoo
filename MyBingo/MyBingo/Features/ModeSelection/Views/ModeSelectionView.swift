@@ -5,40 +5,89 @@
 //  Created by Prabhnoor Kaur on 04/08/25.
 //
 
-
 import SwiftUI
 
 struct ModeSelectionView: View {
     @StateObject private var gameModeManager = GameModeManager()
     @State private var showGameView = false
+    @State private var pulse = false
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 40) {
+            ZStack {
+                AppTheme.neutral
+                    .ignoresSafeArea()
 
-                Text("MyBingo")
-                    .font(.largeTitle).fontWeight(.bold)
-                    .padding(.top, 50)
+                VStack(spacing: 40) {
+                    // Logo / Title
+                    Text("My Bingo")
+                        .font(.system(size: 54, weight: .heavy))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [AppTheme.red, AppTheme.green, AppTheme.yellow],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 6)
+                        .padding(.top, 60)
+                        .scaleEffect(pulse ? 1.03 : 1.0)
+                        .animation(.easeInOut(duration: 1.6).repeatForever(autoreverses: true), value: pulse)
 
-                VStack(spacing: 20) {
-                    // Single-player button
-                    Button("vs AI") {
-                        gameModeManager.startGame(mode: .singlePlayerAI)
-                        showGameView = true
+                    Spacer()
+
+                    // Square buttons side by side
+                    HStack(spacing: 30) {
+                        // Single-player button (Green) - Square
+                        Button {
+                            gameModeManager.startGame(mode: .singlePlayerAI)
+                            showGameView = true
+                        } label: {
+                            VStack(spacing: 16) {
+                                Image(systemName: "cpu")
+                                    .font(.system(size: 40))
+                                    .foregroundColor(.white)
+                                Text("vs AI")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        .buttonStyle(SquareButtonStyle(backgroundColor: AppTheme.green))
+                        .frame(width: 140, height: 140)
+
+                        // Multiplayer button (Red) - Square
+                        Button {
+                            gameModeManager.startGame(mode: .multiplayer)
+                            showGameView = true
+                        } label: {
+                            VStack(spacing: 16) {
+                                Image(systemName: "person.2.fill")
+                                    .font(.system(size: 40))
+                                    .foregroundColor(.white)
+                                Text("Multiplayer")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        .buttonStyle(SquareButtonStyle(backgroundColor: AppTheme.red))
+                        .frame(width: 140, height: 140)
                     }
-                    .buttonStyle(GameModeButtonStyle(color: .blue))
 
-                    // Multiplayer button
-                    Button("Multiplayer") {
-                        gameModeManager.startGame(mode: .multiplayer)
-                        showGameView = true
-                    }
-                    .buttonStyle(GameModeButtonStyle(color: .green))
+                    Spacer()
+
+                    Text("Choose your game mode")
+                        .font(.subheadline).fontWeight(.semibold)
+                        .foregroundColor(.white.opacity(0.9))
+                        .padding(.bottom, 36)
+                        .opacity(pulse ? 1 : 0.65)
+                        .shadow(color: .black.opacity(0.25), radius: 6, x: 0, y: 4)
+                        .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: pulse)
                 }
-
-                Spacer()
+                .navigationBarHidden(true)
+                .onAppear { pulse = true }
             }
-            .navigationBarHidden(true)
         }
         .navigationViewStyle(.stack)
         .fullScreenCover(isPresented: $showGameView) {
@@ -47,14 +96,4 @@ struct ModeSelectionView: View {
     }
 }
 
-// Re-usable style
-private struct GameModeButtonStyle: ButtonStyle {
-    let color: Color
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.title2).foregroundColor(.white)
-            .frame(width: 200, height: 55)
-            .background(color.opacity(configuration.isPressed ? 0.6 : 1))
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-    }
-}
+

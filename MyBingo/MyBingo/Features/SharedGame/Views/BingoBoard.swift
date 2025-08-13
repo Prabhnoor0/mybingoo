@@ -22,8 +22,9 @@ struct BingoBoard: View {
     var body: some View {
         VStack(spacing: 8) {
             Text(title)
-                .font(.headline)
-                .fontWeight(.bold)
+                .font(.title3)
+                .fontWeight(.heavy)
+                .foregroundColor(.white)
                 .padding(.bottom, 5)
             
             VStack(spacing: 2) {
@@ -31,12 +32,12 @@ struct BingoBoard: View {
                 HStack(spacing: 2) {
                     ForEach(0..<5, id: \.self) { letterIndex in
                         Rectangle()
-                            .fill(Color.clear)
+                            .fill(Color.white.opacity(0.08))
                             .frame(width: 48, height: 35)
                             .overlay(
                                 Text(bingoLetters[letterIndex])
                                     .font(.system(size: 18, weight: .bold))
-                                    .foregroundColor(shouldLetterBeGray(letterIndex) ? .gray : .blue)
+                                    .foregroundColor(shouldLetterBeGray(letterIndex) ? .gray : AppTheme.secondary)
                                     .animation(.easeInOut(duration: 0.3), value: completedLines.count)
                             )
                     }
@@ -63,7 +64,7 @@ struct BingoBoard: View {
                             .animation(.easeInOut(duration: 0.5), value: completedLines)
                     }
                 }
-                .frame(width: 250, height: 250)
+                .frame(width: 260, height: 260)
             }
         }
         .padding(.vertical, 10)

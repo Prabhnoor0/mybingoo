@@ -14,22 +14,27 @@ struct BingoCell: View {
     let action: () -> Void
 
     var body: some View {
-        let fillColor: Color = isMarked ? .gray : .black
-        Button(action: action) {
+        let baseColor: Color = isMarked ? AppTheme.accent : AppTheme.neutral
+        Button(action: {
+            HapticsManager.shared.tap()
+            action()
+        }) {
             ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(fillColor)
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(baseColor)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.blue, lineWidth: 2)
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(AppTheme.secondary, lineWidth: 2)
                     )
+                    .shadow(color: .black.opacity(0.25), radius: 8, x: 0, y: 6)
+
                 Text("\(number)")
-                    .font(.system(size: 20, weight: .bold))
+                    .font(.system(size: 20, weight: .heavy))
                     .foregroundColor(.white)
             }
-            .aspectRatio(1, contentMode: .fit) // Ensures square cells
-            .shadow(color: .gray, radius: 10, x: 0, y: 10)
+            .aspectRatio(1, contentMode: .fit)
         }
+        .buttonStyle(ScaledButtonStyle())
         .disabled(isDisabled)
     }
 }
