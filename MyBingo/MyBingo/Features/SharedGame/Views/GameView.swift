@@ -29,7 +29,6 @@ struct GameView: View {
 
                     Spacer(minLength: 10)
 
-                    // Only show ActionBar for single-player and when not showing game end
                     if gameModeManager.selectedMode == .singlePlayerAI && gameModeManager.aiGameState.gameWinner == nil {
                         ActionBar(
                             gameState: gameModeManager.aiGameState,

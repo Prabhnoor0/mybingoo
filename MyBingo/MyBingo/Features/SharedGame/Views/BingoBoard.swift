@@ -2,8 +2,6 @@
 //  BingoBoard.swift
 //  MyBingo
 //
-//  Created by Prabhnoor Kaur on 05/08/25.
-//
 
 
 import SwiftUI
@@ -58,7 +56,7 @@ struct BingoBoard: View {
                         }
                     }
                     
-                    // Line overlays for completed lines
+                  
                     ForEach(Array(completedLines), id: \.self) { lineIndex in
                         LineOverlay(lineIndex: lineIndex)
                             .animation(.easeInOut(duration: 0.5), value: completedLines)
@@ -71,8 +69,6 @@ struct BingoBoard: View {
     }
     
     private func shouldLetterBeGray(_ letterIndex: Int) -> Bool {
-        // B=0, I=1, N=2, G=3, O=4
-        // Turn gray if we have completed at least (letterIndex + 1) lines
         return completedLines.count > letterIndex
     }
 }

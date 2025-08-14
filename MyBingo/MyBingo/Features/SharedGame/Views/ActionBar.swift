@@ -2,12 +2,11 @@
 //  ActionBar.swift
 //  MyBingo
 //
-//  Created by Prabhnoor Kaur on 05/08/25.
-//
+
 import SwiftUI
 
 struct ActionBar: View {
-    @ObservedObject var gameState: AIGameState  // Make it @ObservedObject
+    @ObservedObject var gameState: AIGameState  
     let onNewGame: () -> Void
     let onEndGame: (() -> Void)?
     

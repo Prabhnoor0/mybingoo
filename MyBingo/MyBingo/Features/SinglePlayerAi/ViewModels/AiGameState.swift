@@ -2,8 +2,7 @@
 //  AIGameState.swift
 //  MyBingo
 //
-//  Created by Prabhnoor Kaur on 05/08/25.
-//
+
 
 import Foundation
 import SwiftUI
@@ -27,11 +26,11 @@ final class AIGameState: ObservableObject {
     @Published var aiCompletedLines: Set<Int> = []
 
     private let winPositions: [[Int]] = [
-        [0,1,2,3,4], [5,6,7,8,9], [10,11,12,13,14],     // Rows
-        [15,16,17,18,19], [20,21,22,23,24],              // Rows
-        [0,5,10,15,20], [1,6,11,16,21], [2,7,12,17,22],  // Columns
-        [3,8,13,18,23], [4,9,14,19,24],                  // Columns
-        [0,6,12,18,24], [4,8,12,16,20]                   // Diagonals
+        [0,1,2,3,4], [5,6,7,8,9], [10,11,12,13,14],
+        [15,16,17,18,19], [20,21,22,23,24],
+        [0,5,10,15,20], [1,6,11,16,21], [2,7,12,17,22],
+        [3,8,13,18,23], [4,9,14,19,24],
+        [0,6,12,18,24], [4,8,12,16,20]
     ]
 
     init() {
@@ -51,7 +50,7 @@ final class AIGameState: ObservableObject {
         playerWin = false
         gameEnded = false
         isPlayerTurn = true
-        gameWinner = nil  // This will hide any existing alert
+        gameWinner = nil
         lastPlayerChoice = nil
         aiHasChosenNumber = nil
     }
@@ -133,7 +132,6 @@ final class AIGameState: ObservableObject {
                 print("🏆 Player wins!")
             }
             
-            // DON'T auto-reset - let user choose what to do
             print("🎯 Game ended, waiting for user action")
         }
     }
@@ -154,17 +152,17 @@ final class AIGameState: ObservableObject {
         return completedCount >= 5
     }
     
-    // This is called when user manually ends game via menu
+   
     func endGame() {
         print("🛑 User manually ended game")
         gameEnded = true
         gameWinner = nil
         
-        // Reset immediately when user chooses to end
+       
         startNewGame()
     }
     
-    // Helper functions for UI
+   
     func isNumberMarked(_ number: Int) -> Bool {
         return markedNumbers.contains(number)
     }

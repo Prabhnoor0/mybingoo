@@ -2,8 +2,7 @@
 //  ModeSelectionView.swift
 //  MyBingo
 //
-//  Created by Prabhnoor Kaur on 04/08/25.
-//
+
 
 import SwiftUI
 
@@ -19,7 +18,7 @@ struct ModeSelectionView: View {
                     .ignoresSafeArea()
 
                 VStack(spacing: 40) {
-                    // Logo / Title
+                   
                     Text("My Bingo")
                         .font(.system(size: 54, weight: .heavy))
                         .foregroundStyle(

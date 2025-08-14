@@ -2,8 +2,7 @@
 //  MultiplayerLobbyView.swift
 //  MyBingo
 //
-//  Created by Prabhnoor Kaur on 05/08/25.
-//
+
 
 import SwiftUI
 
@@ -42,7 +41,7 @@ struct MultiplayerLobbyView: View {
                 Group {
                     switch gameState.connectionStatus {
                     case .disconnected:
-                        // Square buttons side by side
+                        
                         HStack(spacing: 30) {
                             // Create Room button (Green) - Square
                             Button {

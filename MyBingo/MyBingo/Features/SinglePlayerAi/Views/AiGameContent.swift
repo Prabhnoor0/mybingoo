@@ -2,8 +2,7 @@
 //  AiGameContent.swift
 //  MyBingo
 //
-//  Created by Prabhnoor Kaur on 05/08/25.
-//
+
 import SwiftUI
 
 struct AIGameContent: View {
@@ -15,12 +14,12 @@ struct AIGameContent: View {
             GameEndView(
                 gameState: gameState,
                 onNewGame: {
-                    // Start new game and hide the end view
+                   
                     gameState.startNewGame()
                     showGameEndView = false
                 },
                 onSeeResults: {
-                    // Just hide the end view to show results
+                   
                     showGameEndView = false
                 }
             )

@@ -2,8 +2,7 @@
 //  MultiplayerGameState.swift
 //  MyBingo
 //
-//  Created by Prabhnoor Kaur on 05/08/25.
-//
+
 
 import SwiftUI
 import Combine

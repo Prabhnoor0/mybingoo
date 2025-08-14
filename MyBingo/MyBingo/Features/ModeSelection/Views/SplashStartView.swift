@@ -18,7 +18,7 @@ struct SplashStartView: View {
                     .transition(.opacity.combined(with: .move(edge: .bottom)))
             } else {
                 VStack(spacing: 32) {
-                    // Main "My Bingo" title with vibrant colors - no animation
+                  
                     VStack(spacing: 8) {
                         Text("My")
                             .font(.system(size: 48, weight: .black))
@@ -43,7 +43,7 @@ struct SplashStartView: View {
                             .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 4)
                     }
                     
-                    // Tap to start text with better contrast
+                  
                     Text("Tap to start")
                         .font(.title2)
                         .fontWeight(.semibold)

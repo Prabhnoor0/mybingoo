@@ -2,8 +2,6 @@
 //  GameEndView.swift
 //  MyBingo
 //
-//  Created by Prabhnoor Kaur on 05/08/25.
-//
 
 import SwiftUI
 
@@ -66,19 +64,19 @@ struct GameEndView: View {
                     .padding(.horizontal, 20)
                     
                     // Action Buttons
-                    VStack(spacing: 14) {
+                   /* VStack(spacing: 14) {
                         Button(action: onNewGame) {
                             Text("Play Again")
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(GlowingPrimaryButtonStyle())
 
-                        Button(action: onSeeResults) {
+                        /*Button(action: onSeeResults) {
                             Text("See Results")
                                 .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(OutlineSecondaryButtonStyle())
-                    }
+                        .buttonStyle(OutlineSecondaryButtonStyle())*/
+                    }*/
                     .padding(.horizontal, 40)
                     .padding(.top, 10)
                 }

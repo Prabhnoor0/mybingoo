@@ -6,13 +6,13 @@
 import SwiftUI
 
 struct AppTheme {
-    // Core palette (red, green, yellow) and deep blue background
+   
     static let red = Color(hex: "#EF4444")
     static let green = Color(hex: "#10B981")
     static let yellow = Color(hex: "#FFB703")
     static let deepBlue = Color(hex: "#0B1B3B") // page background
 
-    // Aliases used by components
+  
     static let primary = yellow
     static let secondary = green
     static let accent = red
@@ -43,7 +43,7 @@ extension Color {
     }
 }
 
-// Note: Background animations removed per design update
+
 
 // MARK: - Reusable Button Styles
 
